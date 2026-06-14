@@ -8,16 +8,16 @@
   </head>
   <body>
     <main class="result-app">
-      <section class="result-panel" id="standbyPanel">
-        <header class="result-head">
+      <section class="standby-view" id="standbyPanel">
+        <header class="top-bar">
           <div>
             <p class="eyebrow">FINAL RESULT</p>
             <h1 id="projectName">結果発表</h1>
           </div>
-          <button class="ghost-button" id="refreshButton" type="button">更新</button>
+          <button class="icon-button" id="refreshButton" type="button">更新</button>
         </header>
 
-        <div class="status-summary">
+        <section class="status-board">
           <div>
             <span>提出状況</span>
             <strong id="submitCount">0 / 0</strong>
@@ -26,27 +26,40 @@
             <span>状態</span>
             <strong id="readyState">確認中</strong>
           </div>
-        </div>
+        </section>
 
-        <section class="result-section">
+        <section class="preview-board">
           <div class="section-title">
             <p class="eyebrow">RANKING</p>
-            <h2>暫定結果</h2>
+            <h2>現在の集計</h2>
           </div>
           <div class="ranking-list" id="rankingList"></div>
         </section>
 
-        <button class="reveal-button" id="startRevealButton" type="button" disabled>結果発表</button>
+        <button class="start-button" id="startRevealButton" type="button" disabled>結果発表</button>
       </section>
 
-      <section class="reveal-stage hidden" id="revealStage">
-        <button class="ghost-button back-button" id="backButton" type="button">戻る</button>
-        <div class="reveal-screen">
-          <p class="eyebrow">FINAL RESULT</p>
-          <div class="reveal-team" id="revealTeam">READY</div>
-          <div class="reveal-score" id="revealScore">---</div>
-          <div class="reveal-sub" id="revealSub">結果発表</div>
-          <div class="reveal-ranking" id="revealRanking"></div>
+      <section class="m1-stage hidden" id="revealStage">
+        <button class="icon-button back-button" id="backButton" type="button">戻る</button>
+        <div class="m1-broadcast-board" id="broadcastBoard">
+          <div class="m1-header">
+            <span>FINAL RESULT</span>
+            <strong id="stageProjectName">結果発表</strong>
+          </div>
+
+          <div class="m1-team-plate">
+            <span id="revealOrder">READY</span>
+            <strong id="revealTeam">READY</strong>
+          </div>
+
+          <div class="judge-score-grid" id="judgeScoreGrid"></div>
+
+          <div class="total-reveal" id="totalReveal">
+            <span>TOTAL SCORE</span>
+            <strong id="revealScore">---</strong>
+          </div>
+
+          <div class="final-ranking hidden" id="finalRanking"></div>
         </div>
       </section>
 
