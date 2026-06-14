@@ -126,9 +126,14 @@ async function revealTeamBoard(team, order) {
 
   const scoreSlots = [...(els.judgeScoreGrid?.querySelectorAll(".judge-score-slot") || [])];
   for (const slot of scoreSlots) {
+    slot.classList.add("active");
+    await wait(360);
     slot.classList.add("revealed");
     playHit();
-    await wait(260);
+    await wait(560);
+    slot.classList.remove("active");
+    slot.classList.add("settled");
+    await wait(220);
   }
 
   await wait(260);
@@ -149,10 +154,10 @@ function buildJudgeScores(team) {
     const empty = document.createElement("div");
     empty.className = "judge-score-slot revealed";
     empty.innerHTML = `
+      <span class="judge-name">NO SCORE</span>
       <div class="slot-door left-door"></div>
       <div class="slot-door right-door"></div>
       <div class="slot-core">
-        <span>NO SCORE</span>
         <strong>--</strong>
       </div>
     `;
@@ -164,14 +169,14 @@ function buildJudgeScores(team) {
     const slot = document.createElement("div");
     slot.className = "judge-score-slot";
     slot.innerHTML = `
+      <span class="judge-name"></span>
       <div class="slot-door left-door"></div>
       <div class="slot-door right-door"></div>
       <div class="slot-core">
-        <span></span>
         <strong></strong>
       </div>
     `;
-    setText(slot.querySelector("span"), item.judgeName);
+    setText(slot.querySelector(".judge-name"), item.judgeName);
     setText(slot.querySelector("strong"), item.total);
     els.judgeScoreGrid.append(slot);
   });

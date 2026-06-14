@@ -313,6 +313,12 @@ h2 {
   filter: saturate(1.1) drop-shadow(0 0 18px rgba(242, 193, 78, 0.24));
 }
 
+.judge-score-slot.active {
+  opacity: 1;
+  transform: translateY(0) scale(1.03);
+  filter: saturate(1.12) drop-shadow(0 0 22px rgba(242, 193, 78, 0.3));
+}
+
 .slot-core {
   position: relative;
   z-index: 1;
@@ -321,13 +327,37 @@ h2 {
   gap: 4px;
 }
 
-.slot-core span {
+.judge-name {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 10px;
+  z-index: 4;
+  min-height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #fff0bc;
+  background: linear-gradient(180deg, #8d1722, #4a0a11);
+  border: 1px solid rgba(255, 230, 150, 0.38);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+  transform: translateY(0) scale(1);
+  transition: transform 0.34s cubic-bezier(0.14, 0.9, 0.18, 1.2), filter 0.24s ease;
   max-width: 100%;
   overflow-wrap: anywhere;
-  color: #31220d;
   font-size: clamp(0.72rem, 1.5vw, 1rem);
   font-weight: 950;
   text-align: center;
+}
+
+.judge-score-slot.active .judge-name {
+  transform: translateY(calc(-100% - 42px)) scale(1.08);
+  filter: brightness(1.18);
+}
+
+.judge-score-slot.settled .judge-name {
+  transform: translateY(0) scale(1);
 }
 
 .slot-core strong {
@@ -373,11 +403,12 @@ h2 {
   transform: perspective(700px) rotateY(112deg) translateX(8%);
 }
 
-.judge-score-slot:not(.revealed) .slot-core {
+.judge-score-slot:not(.revealed) .slot-core strong {
   opacity: 0;
+  transform: scale(0.72);
 }
 
-.judge-score-slot.revealed .slot-core {
+.judge-score-slot.revealed .slot-core strong {
   animation: scorePop 0.48s cubic-bezier(0.14, 0.9, 0.18, 1.2) 0.12s both;
 }
 
