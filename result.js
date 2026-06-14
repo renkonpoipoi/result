@@ -148,7 +148,14 @@ function buildJudgeScores(team) {
   if (!totals.length) {
     const empty = document.createElement("div");
     empty.className = "judge-score-slot revealed";
-    empty.innerHTML = `<span>NO SCORE</span><strong>--</strong>`;
+    empty.innerHTML = `
+      <div class="slot-door left-door"></div>
+      <div class="slot-door right-door"></div>
+      <div class="slot-core">
+        <span>NO SCORE</span>
+        <strong>--</strong>
+      </div>
+    `;
     els.judgeScoreGrid.append(empty);
     return;
   }
@@ -157,8 +164,12 @@ function buildJudgeScores(team) {
     const slot = document.createElement("div");
     slot.className = "judge-score-slot";
     slot.innerHTML = `
-      <span></span>
-      <strong></strong>
+      <div class="slot-door left-door"></div>
+      <div class="slot-door right-door"></div>
+      <div class="slot-core">
+        <span></span>
+        <strong></strong>
+      </div>
     `;
     setText(slot.querySelector("span"), item.judgeName);
     setText(slot.querySelector("strong"), item.total);

@@ -285,6 +285,8 @@ h2 {
 }
 
 .judge-score-slot {
+  position: relative;
+  overflow: hidden;
   aspect-ratio: 1.06;
   display: grid;
   place-items: center;
@@ -302,6 +304,7 @@ h2 {
     inset 0 -18px 30px rgba(0, 0, 0, 0.18);
   transition: opacity 0.22s ease, transform 0.22s ease, filter 0.22s ease;
   filter: saturate(0.65);
+  perspective: 700px;
 }
 
 .judge-score-slot.revealed {
@@ -310,7 +313,15 @@ h2 {
   filter: saturate(1.1) drop-shadow(0 0 18px rgba(242, 193, 78, 0.24));
 }
 
-.judge-score-slot span {
+.slot-core {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+}
+
+.slot-core span {
   max-width: 100%;
   overflow-wrap: anywhere;
   color: #31220d;
@@ -319,11 +330,55 @@ h2 {
   text-align: center;
 }
 
-.judge-score-slot strong {
+.slot-core strong {
   color: #130b02;
   font-size: clamp(2rem, 5vw, 4.2rem);
   line-height: 0.95;
   font-weight: 950;
+}
+
+.slot-door {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: calc(50% - 6px);
+  z-index: 2;
+  border: 1px solid rgba(255, 236, 176, 0.28);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 35%, rgba(255, 255, 255, 0.12) 50%, transparent 68%, rgba(0, 0, 0, 0.22)),
+    linear-gradient(180deg, #65101a, #2b080d 48%, #7d121d);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.42);
+  transition: transform 0.62s cubic-bezier(0.1, 0.82, 0.14, 1);
+}
+
+.slot-door.left-door {
+  left: 6px;
+  transform-origin: left center;
+}
+
+.slot-door.right-door {
+  right: 6px;
+  transform-origin: right center;
+}
+
+.judge-score-slot:not(.revealed) .slot-door {
+  animation: slotDoorPressure 0.72s ease-in-out infinite alternate;
+}
+
+.judge-score-slot.revealed .slot-door.left-door {
+  transform: perspective(700px) rotateY(-112deg) translateX(-8%);
+}
+
+.judge-score-slot.revealed .slot-door.right-door {
+  transform: perspective(700px) rotateY(112deg) translateX(8%);
+}
+
+.judge-score-slot:not(.revealed) .slot-core {
+  opacity: 0;
+}
+
+.judge-score-slot.revealed .slot-core {
+  animation: scorePop 0.48s cubic-bezier(0.14, 0.9, 0.18, 1.2) 0.12s both;
 }
 
 .total-reveal {
@@ -493,6 +548,30 @@ h2 {
     transform: scale(1.08);
   }
   100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slotDoorPressure {
+  from {
+    filter: brightness(0.86);
+  }
+  to {
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes scorePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.74);
+  }
+  62% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
     transform: scale(1);
   }
 }
