@@ -13,6 +13,7 @@ const els = {
   revealOrder: document.querySelector("#revealOrder"),
   revealTeam: document.querySelector("#revealTeam"),
   judgeScoreGrid: document.querySelector("#judgeScoreGrid"),
+  judgeStrip: document.querySelector("#judgeStrip"),
   totalReveal: document.querySelector("#totalReveal"),
   revealScore: document.querySelector("#revealScore"),
   finalRanking: document.querySelector("#finalRanking"),
@@ -125,13 +126,15 @@ async function revealTeamBoard(team, order) {
   await wait(650);
 
   const scoreSlots = [...(els.judgeScoreGrid?.querySelectorAll(".judge-score-slot") || [])];
-  for (const slot of scoreSlots) {
-    slot.classList.add("active");
+  for (const [index, slot] of scoreSlots.entries()) {
+    const badge = els.judgeStrip?.querySelector(`[data-index="${index}"]`);
+    badge?.classList.add("active");
     await wait(360);
     slot.classList.add("revealed");
     playHit();
     await wait(560);
-    slot.classList.remove("active");
+    badge?.classList.remove("active");
+    badge?.classList.add("settled");
     slot.classList.add("settled");
     await wait(220);
   }
@@ -149,12 +152,12 @@ async function revealTeamBoard(team, order) {
 function buildJudgeScores(team) {
   if (!els.judgeScoreGrid) return;
   els.judgeScoreGrid.replaceChildren();
+  els.judgeStrip?.replaceChildren();
   const totals = team.judgeTotals || [];
   if (!totals.length) {
     const empty = document.createElement("div");
     empty.className = "judge-score-slot revealed";
     empty.innerHTML = `
-      <span class="judge-name">NO SCORE</span>
       <div class="slot-door left-door"></div>
       <div class="slot-door right-door"></div>
       <div class="slot-core">
@@ -162,24 +165,33 @@ function buildJudgeScores(team) {
       </div>
     `;
     els.judgeScoreGrid.append(empty);
+    appendJudgeBadge("NO SCORE", 0);
     return;
   }
 
-  totals.forEach((item) => {
+  totals.forEach((item, index) => {
     const slot = document.createElement("div");
     slot.className = "judge-score-slot";
     slot.innerHTML = `
-      <span class="judge-name"></span>
       <div class="slot-door left-door"></div>
       <div class="slot-door right-door"></div>
       <div class="slot-core">
         <strong></strong>
       </div>
     `;
-    setText(slot.querySelector(".judge-name"), item.judgeName);
     setText(slot.querySelector("strong"), item.total);
     els.judgeScoreGrid.append(slot);
+    appendJudgeBadge(item.judgeName, index);
   });
+}
+
+function appendJudgeBadge(name, index) {
+  if (!els.judgeStrip) return;
+  const badge = document.createElement("span");
+  badge.className = "judge-badge";
+  badge.dataset.index = String(index);
+  badge.textContent = name;
+  els.judgeStrip.append(badge);
 }
 
 async function countTo(target) {
@@ -224,6 +236,7 @@ function resetBoard() {
   els.finalRanking?.classList.add("hidden");
   els.finalRanking?.replaceChildren();
   els.judgeScoreGrid?.replaceChildren();
+  els.judgeStrip?.replaceChildren();
 }
 
 function prepareAudio() {

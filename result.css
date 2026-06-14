@@ -201,7 +201,7 @@ h2 {
   width: min(1180px, 100%);
   min-height: min(760px, calc(100vh - 48px));
   display: grid;
-  grid-template-rows: auto auto minmax(150px, 1fr) auto auto;
+  grid-template-rows: auto auto minmax(150px, 1fr) auto auto auto;
   gap: clamp(12px, 2vw, 24px);
   padding: clamp(18px, 3vw, 42px);
   border-radius: 8px;
@@ -313,51 +313,12 @@ h2 {
   filter: saturate(1.1) drop-shadow(0 0 18px rgba(242, 193, 78, 0.24));
 }
 
-.judge-score-slot.active {
-  opacity: 1;
-  transform: translateY(0) scale(1.03);
-  filter: saturate(1.12) drop-shadow(0 0 22px rgba(242, 193, 78, 0.3));
-}
-
 .slot-core {
   position: relative;
   z-index: 1;
   display: grid;
   place-items: center;
   gap: 4px;
-}
-
-.judge-name {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 10px;
-  z-index: 4;
-  min-height: 28px;
-  display: grid;
-  place-items: center;
-  padding: 4px 6px;
-  border-radius: 6px;
-  color: #fff0bc;
-  background: linear-gradient(180deg, #8d1722, #4a0a11);
-  border: 1px solid rgba(255, 230, 150, 0.38);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
-  transform: translateY(0) scale(1);
-  transition: transform 0.34s cubic-bezier(0.14, 0.9, 0.18, 1.2), filter 0.24s ease;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  font-size: clamp(0.72rem, 1.5vw, 1rem);
-  font-weight: 950;
-  text-align: center;
-}
-
-.judge-score-slot.active .judge-name {
-  transform: translateY(calc(-100% - 42px)) scale(1.08);
-  filter: brightness(1.18);
-}
-
-.judge-score-slot.settled .judge-name {
-  transform: translateY(0) scale(1);
 }
 
 .slot-core strong {
@@ -410,6 +371,51 @@ h2 {
 
 .judge-score-slot.revealed .slot-core strong {
   animation: scorePop 0.48s cubic-bezier(0.14, 0.9, 0.18, 1.2) 0.12s both;
+}
+
+.judge-strip {
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 1vw, 12px);
+  min-height: 52px;
+  padding: 6px 4px 0;
+  overflow: visible;
+}
+
+.judge-badge {
+  flex: 0 1 92px;
+  min-width: 64px;
+  max-width: 112px;
+  min-height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 230, 150, 0.44);
+  color: #fff0bc;
+  background:
+    linear-gradient(180deg, #8e1721, #4b0a11),
+    #6b0d16;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  font-size: clamp(0.78rem, 1.45vw, 1.02rem);
+  font-weight: 950;
+  text-align: center;
+  overflow-wrap: anywhere;
+  transform: translateY(0) scale(1);
+  transition:
+    transform 0.36s cubic-bezier(0.14, 0.9, 0.18, 1.22),
+    filter 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.judge-badge.active {
+  transform: translateY(calc(-100% - 84px)) scale(1.12);
+  filter: brightness(1.18);
+  box-shadow: 0 0 28px rgba(242, 193, 78, 0.34), 0 14px 22px rgba(0, 0, 0, 0.36);
+}
+
+.judge-badge.settled {
+  transform: translateY(0) scale(1);
 }
 
 .total-reveal {
@@ -640,7 +646,7 @@ h2 {
 
   .m1-broadcast-board {
     min-height: calc(100vh - 24px);
-    grid-template-rows: auto auto minmax(180px, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(180px, 1fr) auto auto auto;
   }
 
   .m1-team-plate {
@@ -651,6 +657,16 @@ h2 {
 
   .judge-score-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .judge-strip {
+    justify-content: start;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .judge-badge.active {
+    transform: translateY(calc(-100% - 64px)) scale(1.08);
   }
 
   .final-rank-row {
