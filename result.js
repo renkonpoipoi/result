@@ -132,8 +132,10 @@ async function revealTeamBoard(team, order) {
   }
 
   await wait(260);
-  els.totalReveal?.classList.add("armed");
+  els.totalReveal?.classList.add("closed");
+  await wait(740);
   await countTo(team.total);
+  els.totalReveal?.classList.remove("closed");
   els.totalReveal?.classList.add("revealed");
   playHit();
   await wait(1200);
@@ -202,7 +204,7 @@ async function revealFinalRanking() {
 
 function resetBoard() {
   els.broadcastBoard?.classList.remove("impact");
-  els.totalReveal?.classList.remove("armed", "revealed");
+  els.totalReveal?.classList.remove("closed", "revealed");
   els.finalRanking?.classList.add("hidden");
   els.finalRanking?.replaceChildren();
   els.judgeScoreGrid?.replaceChildren();
