@@ -9,7 +9,17 @@ from flask import Flask, jsonify, request, send_from_directory
 
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SOURCE_BASE_URL = os.environ.get("SCORE_SOURCE_BASE_URL", "https://saiten.onrender.com").rstrip("/")
+DEFAULT_SOURCE_BASE_URL = "https://saiten.onrender.com"
+
+
+def source_base_url() -> str:
+    configured = (
+        os.environ.get("SCORE_SOURCE_BASE_URL")
+        or os.environ.get("SAITEN_BASE_URL")
+        or DEFAULT_SOURCE_BASE_URL
+    )
+    return configured.strip().rstrip("/")
+
 
 app = Flask(__name__, static_folder=None)
 
@@ -38,8 +48,23 @@ def result_summary():
     return proxy_json("/api/result/summary", query)
 
 
-def proxy_json(path: str, query: dict | None = None):
-    url = f"{SOURCE_BASE_URL}{path}"
+@app.get("/api/source")
+def source_status():
+    response, status = proxy_json("/api/projects", as_tuple=True)
+    payload = response.get_json(silent=True) or {}
+    return jsonify(
+        {
+            "sourceBaseUrl": source_base_url(),
+            "ok": status == 200 and "projects" in payload,
+            "status": status,
+            "projectCount": len(payload.get("projects", [])) if isinstance(payload.get("projects"), list) else 0,
+            "error": payload.get("error"),
+        }
+    ), 200 if status == 200 else status
+
+
+def proxy_json(path: str, query: dict | None = None, as_tuple: bool = False):
+    url = f"{source_base_url()}{path}"
     if query:
         url = f"{url}?{urlencode(query)}"
 
@@ -48,14 +73,36 @@ def proxy_json(path: str, query: dict | None = None):
         with urlopen(source_request, timeout=12) as response:
             body = response.read()
             status = response.status
+            proxied = app.response_class(body, status=status, content_type="application/json; charset=utf-8")
     except HTTPError as exc:
-        return jsonify({"error": f"採点アプリから結果を取得できませんでした。HTTP {exc.code}"}), exc.code
-    except URLError:
-        return jsonify({"error": "採点アプリに接続できませんでした。"}), 502
+        proxied = jsonify(
+            {
+                "error": f"採点アプリから結果を取得できませんでした。HTTP {exc.code}",
+                "sourceBaseUrl": source_base_url(),
+            }
+        )
+        status = exc.code
     except TimeoutError:
-        return jsonify({"error": "採点アプリへの接続がタイムアウトしました。"}), 504
+        proxied = jsonify(
+            {
+                "error": "採点アプリへの接続がタイムアウトしました。",
+                "sourceBaseUrl": source_base_url(),
+            }
+        )
+        status = 504
+    except URLError:
+        proxied = jsonify(
+            {
+                "error": "採点アプリに接続できませんでした。SCORE_SOURCE_BASE_URL を確認してください。",
+                "sourceBaseUrl": source_base_url(),
+            }
+        )
+        status = 502
 
-    return app.response_class(body, status=status, content_type="application/json; charset=utf-8")
+    proxied.headers["Cache-Control"] = "no-store"
+    if as_tuple:
+        return proxied, status
+    return proxied, status
 
 
 @app.get("/<path:filename>")

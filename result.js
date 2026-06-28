@@ -22,7 +22,7 @@ const els = {
 };
 
 const params = new URLSearchParams(window.location.search);
-let selectedProjectId = params.get("project") || "";
+let selectedProjectId = params.get("project") || params.get("projectId") || "";
 let projects = [];
 let summary = null;
 let isRevealing = false;
@@ -48,7 +48,7 @@ async function loadProjects() {
   try {
     const response = await fetch("/api/projects");
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u4e00\u89a7\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f\u3002");
+    if (!response.ok) throw new Error(errorMessage(data, "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u4e00\u89a7\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f\u3002"));
     projects = data.projects || [];
     if (!selectedProjectId && projects.length) selectedProjectId = projects[0].id;
     renderProjectSelect();
@@ -80,7 +80,7 @@ async function loadSummary() {
     const query = `?projectId=${encodeURIComponent(selectedProjectId)}`;
     const response = await fetch(`/api/result/summary${query}`);
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "\u7d50\u679c\u30c7\u30fc\u30bf\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f\u3002");
+    if (!response.ok) throw new Error(errorMessage(data, "\u7d50\u679c\u30c7\u30fc\u30bf\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f\u3002"));
     summary = data;
     renderStandby();
     hideMessage();
@@ -491,4 +491,9 @@ function showMessage(text) {
 
 function hideMessage() {
   els.messageBox?.classList.add("hidden");
+}
+
+function errorMessage(data, fallback) {
+  const message = data?.error || fallback;
+  return data?.sourceBaseUrl ? `${message} 接続先: ${data.sourceBaseUrl}` : message;
 }

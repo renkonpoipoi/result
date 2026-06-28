@@ -3,73 +3,71 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>結果発表</title>
+    <title>&#32080;&#26524;&#30330;&#34920;</title>
     <link rel="stylesheet" href="./result.css" />
   </head>
   <body>
-    <main class="result-app">
-      <section class="standby-view" id="standbyPanel">
-        <header class="top-bar">
-          <div>
-            <p class="eyebrow">FINAL RESULT</p>
-            <h1 id="projectName">結果発表</h1>
-          </div>
-          <button class="icon-button" id="refreshButton" type="button">更新</button>
-        </header>
+    <div class="app-shell result-only-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">FINAL RESULT</p>
+          <h1 id="projectName">&#32080;&#26524;&#30330;&#34920;</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="secondary-button" id="refreshButton" type="button">&#26356;&#26032;</button>
+        </div>
+      </header>
 
-        <section class="status-board">
-          <div>
-            <span>提出状況</span>
-            <strong id="submitCount">0 / 0</strong>
-          </div>
-          <div>
-            <span>状態</span>
-            <strong id="readyState">確認中</strong>
-          </div>
-        </section>
-
-        <section class="preview-board">
-          <div class="section-title">
-            <p class="eyebrow">RANKING</p>
-            <h2>現在の集計</h2>
-          </div>
-          <div class="ranking-list" id="rankingList"></div>
-        </section>
-
-        <button class="start-button" id="startRevealButton" type="button" disabled>結果発表</button>
-      </section>
-
-      <section class="m1-stage hidden" id="revealStage">
-        <button class="icon-button back-button" id="backButton" type="button">戻る</button>
-        <div class="m1-broadcast-board" id="broadcastBoard">
-          <div class="m1-header">
-            <span>FINAL RESULT</span>
-            <strong id="stageProjectName">結果発表</strong>
-          </div>
-
-          <div class="m1-team-plate">
-            <span id="revealOrder">READY</span>
-            <strong id="revealTeam">READY</strong>
-          </div>
-
-          <div class="judge-score-grid" id="judgeScoreGrid"></div>
-          <div class="judge-strip" id="judgeStrip"></div>
-
-          <div class="total-reveal" id="totalReveal">
-            <div class="score-door left-door"></div>
-            <div class="score-door right-door"></div>
-            <div class="score-core">
-              <span>TOTAL SCORE</span>
-              <strong id="revealScore">---</strong>
+      <main class="workspace">
+        <section class="view active" id="resultView">
+          <div class="result-stage">
+            <div class="stage-copy">
+              <p class="eyebrow">FINAL RESULT</p>
+              <h2 id="resultTitle">&#32080;&#26524;&#30330;&#34920;</h2>
+              <p id="resultLead">&#25505;&#28857;&#12487;&#12540;&#12479;&#12434;&#35501;&#12415;&#36796;&#12435;&#12391;&#12356;&#12414;&#12377;&#12290;</p>
+            </div>
+            <div class="reveal-board">
+              <div class="reveal-judge-strip" id="revealJudgeStrip"></div>
+              <div class="reveal-team" id="revealTeam">&#24453;&#27231;&#20013;</div>
+              <div class="judge-score-line" id="judgeScoreLine"></div>
+              <div class="reveal-score" id="revealScore">---</div>
+              <div class="reveal-sub" id="revealSub">Ready</div>
+            </div>
+            <label class="project-select-panel" for="projectSelect">
+              <span class="project-select-label">&#25505;&#28857;&#12503;&#12525;&#12472;&#12455;&#12463;&#12488;</span>
+              <span class="project-select-control">
+                <select id="projectSelect" class="project-select"></select>
+              </span>
+            </label>
+            <div class="result-actions">
+              <button class="secondary-button reveal-start-button" id="startRevealButton" type="button" disabled>&#30330;&#34920;&#38283;&#22987;</button>
             </div>
           </div>
 
-          <div class="final-ranking hidden" id="finalRanking"></div>
+          <div class="reveal-flow hidden" id="revealFlow">
+            <div class="reveal-flow-head">
+              <div>
+                <p class="eyebrow">SCORE REVEAL</p>
+                <h2>&#24471;&#28857;&#30330;&#34920;</h2>
+              </div>
+              <button class="secondary-button" id="backResultButton" type="button">&#25147;&#12427;</button>
+            </div>
+            <div class="score-matrix" id="scoreMatrix"></div>
+          </div>
+
+          <div class="ranking-list hidden" id="rankingList"></div>
+        </section>
+      </main>
+
+      <template id="emptyTemplate">
+        <div class="empty-state">
+          <strong>&#12414;&#12384;&#38598;&#35336;&#12391;&#12365;&#12427;&#25505;&#28857;&#12364;&#12354;&#12426;&#12414;&#12379;&#12435;</strong>
+          <span>&#25505;&#28857;&#32773;&#12398;&#25552;&#20986;&#24460;&#12395;&#32080;&#26524;&#30330;&#34920;&#12391;&#12365;&#12414;&#12377;&#12290;</span>
         </div>
-      </section>
+      </template>
 
       <div class="toast hidden" id="messageBox"></div>
-    </main>
+    </div>
 
     <script src="./result.js"></script>
   </body>
