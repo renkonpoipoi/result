@@ -24,13 +24,22 @@ def result_page():
     return send_from_directory(ROOT, "result.html")
 
 
+@app.get("/api/projects")
+def projects():
+    return proxy_json("/api/projects")
+
+
 @app.get("/api/result/summary")
 def result_summary():
     query = {}
     project_id = request.args.get("projectId", "").strip()
     if project_id:
         query["projectId"] = project_id
-    url = f"{SOURCE_BASE_URL}/api/result/summary"
+    return proxy_json("/api/result/summary", query)
+
+
+def proxy_json(path: str, query: dict | None = None):
+    url = f"{SOURCE_BASE_URL}{path}"
     if query:
         url = f"{url}?{urlencode(query)}"
 

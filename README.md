@@ -1,8 +1,8 @@
 # Result Display App
 
-採点アプリとは別に公開する、結果表示専用アプリです。
+採点アプリとは別に公開する、結果発表専用アプリです。
 
-## Render設定
+## Render 設定
 
 ```text
 Build Command: pip install -r requirements.txt
@@ -15,9 +15,9 @@ Start Command: gunicorn flask_app:app --bind 0.0.0.0:$PORT --workers 1
 SCORE_SOURCE_BASE_URL=https://saiten.onrender.com
 ```
 
-`SCORE_SOURCE_BASE_URL` には、採点用アプリのRender URLを入れます。
+`SCORE_SOURCE_BASE_URL` には、採点用アプリの Render URL を入れてください。
 
-## 表示URL
+## 表示 URL
 
 ```text
 https://結果表示アプリのURL/
